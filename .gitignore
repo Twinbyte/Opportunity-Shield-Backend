@@ -1,0 +1,11 @@
+bin/
+obj/
+
+
+.idea/
+.vs/
+
+.DS_Store
+
+appsettings.Development.json
+.env
