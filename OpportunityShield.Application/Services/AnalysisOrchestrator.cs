@@ -44,7 +44,6 @@ public class AnalysisOrchestrator : IAnalysisOrchestrator
             // call entirely.
             // safety net, never used silently (frontend must label it).
             var demo = DemoCatalog.TryMatch(analysis.Content);
-            Console.WriteLine($"[DEBUG] Content=\"{analysis.Content}\" Length={analysis.Content.Length} MatchFound={demo is not null}");
             if (demo is not null)
             {
                 await CompleteWithDemoAsync(analysisId, demo, ct);
