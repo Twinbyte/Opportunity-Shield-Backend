@@ -1,0 +1,12 @@
+.git
+.gitignore
+.idea
+.vs
+.vscode
+.DS_Store
+
+**/bin/
+**/obj/
+
+appsettings.Development.json
+.env
