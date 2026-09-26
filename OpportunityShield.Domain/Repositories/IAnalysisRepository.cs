@@ -11,7 +11,7 @@ public interface IAnalysisRepository
 
     Task<Analysis?> GetByIdWithResultAsync(Guid id, CancellationToken ct = default);
 
-    // Cursor-paginated history for a given session/user, newest first.
+    
     Task<(IReadOnlyList<Analysis> Items, string? NextCursor)> GetPagedBySessionAsync(
         string sessionId, int limit, string? cursor, CancellationToken ct = default);
 
@@ -22,11 +22,11 @@ public interface IAnalysisRepository
         string? errorMessage = null,
         CancellationToken ct = default);
 
-    // Overwrites the live progress feed for an in-flight analysis.
+    
     Task UpdateProgressAsync(Guid id, List<ProgressStep> steps, CancellationToken ct = default);
 
-    // Attaches the completed result (with its Signals/EvidenceItems already populated)
-    // to an existing Analysis and persists it.
+    
+    
     Task AttachResultAsync(Guid analysisId, AnalysisResult result, CancellationToken ct = default);
 
     Task SaveChangesAsync(CancellationToken ct = default);

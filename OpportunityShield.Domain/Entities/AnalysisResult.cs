@@ -17,8 +17,8 @@ public class AnalysisResult
     public string OpportunityName { get; set; } = string.Empty;
     public string Organization { get; set; } = string.Empty;
 
-    // 0-100
-    public int TrustScore { get; set; }
+    // Null when RiskLevel is UnableToVerify — a numeric score would imply
+    public int? TrustScore { get; set; }
 
     public RiskLevel RiskLevel { get; set; }
 

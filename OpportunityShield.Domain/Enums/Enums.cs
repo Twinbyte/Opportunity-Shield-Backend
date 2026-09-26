@@ -22,7 +22,6 @@ public enum RiskLevel
 
     // Evidence was insufficient or conflicting to reach a real verdict.
     // This is a legitimate, first-class outcome — not an error state.
-    // Reserve AnalysisStatus.Failed for actual system/API failures instead.
     UnableToVerify
 }
 

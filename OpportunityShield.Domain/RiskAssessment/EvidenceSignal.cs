@@ -11,7 +11,6 @@ public class EvidenceSignal
     public required SignalValue Value { get; init; }
 
     // Unknown value should always carry SourceQuality.Unknown — there's
-    // nothing to rate the quality of when nothing was resolved.
     public SourceQuality SourceQuality { get; init; } = SourceQuality.Unknown;
 
     // e.g. "official_domain", "university_career_page", "whois", "gemini_search"
