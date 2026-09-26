@@ -108,14 +108,12 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-
-    // Dev convenience only — apply real migrations explicitly in any other
-    // environment (see SETUP.md). Never auto-migrate in production.
     using var scope = app.Services.CreateScope();
     await scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.MigrateAsync();
 }
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseCors("Frontend");
 app.UseMiddleware<SessionIdMiddleware>();
