@@ -15,7 +15,6 @@ using Oppurtunityshield.Infrastructure.Repositories;
 using Oppurtunityshield.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-var __debugConnString = builder.Configuration.GetConnectionString("Default");
 Console.WriteLine($"[DEBUG] ConnectionString resolved: IsNull={__debugConnString is null} " +
                   $"IsEmpty={__debugConnString == string.Empty} Length={__debugConnString?.Length ?? -1}");
 // --- JSON: enums serialize as camelCase strings (e.g. "unableToVerify") -----
