@@ -40,7 +40,11 @@ public class GroqContentAnalyzer : IContentAnalyzer
                        doesn't give enough information either way). Use exactly these three words — not
                        "Positive"/"Negative". Include a short quoted-or-paraphrased detail only when the
                        value is "Present".
-
+                       Guidance: mark urgencyPressureLanguage "Present" only for pressure meant to rush the 
+                       reader into paying or acting quickly (e.g. "only 3 slots left", "pay within 24 hours", 
+                       "act now"). Countdown timers, event dates and ordinary registration deadlines are NOT 
+                       pressure tactics. If no pay, salary or benefit is described, answer "Unknown" for 
+                       unrealisticOffer, not "Absent".
                        Respond with ONLY this JSON shape, no markdown fences:
                        {
                          "paymentRequestPresent": "Present"|"Absent"|"Unknown",

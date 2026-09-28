@@ -91,6 +91,6 @@ public static class SignalPresentation
         // down to the sum of all negative weights (~-110). Clamp and rescale
         // to a 0-100 band centered so Medium sits near the middle.
         var clamped = Math.Clamp(result.Score, -60, 60);
-        return (int)Math.Round((clamped + 60) / 120.0 * 100);
+        return Math.Min(95, (int)Math.Round((clamped + 60) / 120.0 * 100));
     }
 }
