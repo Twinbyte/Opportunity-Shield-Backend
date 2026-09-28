@@ -18,19 +18,22 @@ public class AnalysisOrchestrator : IAnalysisOrchestrator
     private readonly IContentAnalyzer _contentAnalyzer;
     private readonly IExplanationGenerator _explanationGenerator;
     private readonly SemaphoreSlim _progressLock = new(1, 1);
+    private readonly IPageContentFetcher _pageFetcher;
 
     public AnalysisOrchestrator(
         IAnalysisRepository repository,
         IDomainInspector domainInspector,
         IOrganizationResearcher organizationResearcher,
         IContentAnalyzer contentAnalyzer,
-        IExplanationGenerator explanationGenerator)
+        IExplanationGenerator explanationGenerator,
+        IPageContentFetcher pageFetcher)
     {
         _repository = repository;
         _domainInspector = domainInspector;
         _organizationResearcher = organizationResearcher;
         _contentAnalyzer = contentAnalyzer;
         _explanationGenerator = explanationGenerator;
+        _pageFetcher = pageFetcher;
     }
 
     public async Task RunAsync(Guid analysisId, CancellationToken ct = default)
@@ -75,7 +78,11 @@ public class AnalysisOrchestrator : IAnalysisOrchestrator
             new() { Label = "Preparing risk assessment", Status = "pending" }
         };
         await _repository.UpdateProgressAsync(analysis.Id, steps, ct);
-
+        if (analysis.InputType == InputType.Url)
+        {
+            var pageText = await _pageFetcher.FetchTextAsync(analysis.Content, ct);
+            submission = submission with { PageText = pageText };
+        }
         var domainTask = RunStepAsync(analysis.Id, steps, 0,
             () => _domainInspector.InspectAsync(submission, ct), ct);
         var orgTask = RunStepAsync(analysis.Id, steps, 1,

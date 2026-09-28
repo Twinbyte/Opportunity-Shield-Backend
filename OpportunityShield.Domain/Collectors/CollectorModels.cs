@@ -10,10 +10,15 @@ namespace Oppurtunityshield.Domain.Collectors;
 /// </summary>
 public record OpportunitySubmission(string Content, InputType InputType)
 {
-    // Null when InputType is Text, or when the URL couldn't be parsed.
     public string? Host { get; init; }
-}
 
+
+    public string? PageText { get; init; }
+
+    public string TextForAnalysis => PageText is { Length: > 0 }
+        ? $"Source URL: {Content}\n\nPage text:\n{PageText}"
+        : Content;
+}
 /// <summary>
 /// Raw output of deterministic, non-AI domain checks. No judgment calls here —
 /// just facts, or null when a fact couldn't be established.

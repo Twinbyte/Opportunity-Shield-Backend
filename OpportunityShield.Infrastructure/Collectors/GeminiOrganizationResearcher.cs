@@ -48,7 +48,7 @@ public class GeminiOrganizationResearcher : IOrganizationResearcher
 
         Submitted content:
         ---
-        {{submission.Content}}
+        {{submission.TextForAnalysis}}
         ---
 
         Respond with ONLY a JSON object (no markdown fences, no commentary) matching

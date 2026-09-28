@@ -15,8 +15,7 @@ using Oppurtunityshield.Infrastructure.Repositories;
 using Oppurtunityshield.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-Console.WriteLine($"[DEBUG] ConnectionString resolved: IsNull={__debugConnString is null} " +
-                  $"IsEmpty={__debugConnString == string.Empty} Length={__debugConnString?.Length ?? -1}");
+
 // --- JSON: enums serialize as camelCase strings (e.g. "unableToVerify") -----
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -49,6 +48,8 @@ builder.Services.AddScoped<IOrganizationResearcher, GeminiOrganizationResearcher
 builder.Services.AddScoped<IContentAnalyzer, GroqContentAnalyzer>();
 builder.Services.AddScoped<IExplanationGenerator, GroqExplanationGenerator>();
 builder.Services.AddScoped<IAnalysisOrchestrator, AnalysisOrchestrator>();
+builder.Services.AddHttpClient<IPageContentFetcher, HttpPageContentFetcher>()
+    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { AllowAutoRedirect = false });
 
 // --- Background processing: queue is a singleton, worker drains it -----------
 builder.Services.AddSingleton<IAnalysisQueue, AnalysisQueue>();

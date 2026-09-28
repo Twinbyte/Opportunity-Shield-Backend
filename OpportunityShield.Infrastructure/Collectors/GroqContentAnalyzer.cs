@@ -32,7 +32,7 @@ public class GroqContentAnalyzer : IContentAnalyzer
         var prompt = $$"""
                        Submitted opportunity text:
                        ---
-                       {{submission.Content}}
+                       {{submission.TextForAnalysis}}
                        ---
 
                        For each of the four checks below, respond with "Present" (the pattern IS found in

@@ -34,3 +34,8 @@ public interface IContentAnalyzer
     Task<IReadOnlyList<EvidenceSignal>> AnalyzeAsync(
         OpportunitySubmission submission, CancellationToken ct = default);
 }
+
+public interface IPageContentFetcher
+{
+    Task<string?> FetchTextAsync(string url, CancellationToken ct = default);
+}
