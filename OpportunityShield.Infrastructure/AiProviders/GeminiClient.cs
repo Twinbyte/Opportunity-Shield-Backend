@@ -17,16 +17,13 @@ public class GeminiClient
 {
     private readonly HttpClient _http;
     private readonly GeminiOptions _options;
-    private readonly ILogger<GroqClient> _logger;
     
-    public GeminiClient(HttpClient http, IOptions<GeminiOptions> options, ILogger<GroqClient> logger)
+    public GeminiClient(HttpClient http, IOptions<GeminiOptions> options)
     {
         _http = http;
         _options = options.Value;
         _http.Timeout = TimeSpan.FromSeconds(_options.TimeoutSeconds);
-        _logger = logger;
-        if (string.IsNullOrWhiteSpace(_options.ApiKey))
-            _logger.LogWarning("Groq ApiKey is not configured");
+        
     }
 
     /// <summary>
@@ -52,13 +49,6 @@ public class GeminiClient
             url,
             new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json"),
             ct);
-        if (!response.IsSuccessStatusCode)
-        {
-            var errorBody = await response.Content.ReadAsStringAsync(ct);
-            _logger.LogWarning("Groq request failed: {Status} model={Model} body={Body}",
-                (int)response.StatusCode, _options.Model,
-                errorBody.Length > 300 ? errorBody[..300] : errorBody);
-        }
         response.EnsureSuccessStatusCode();
 
         using var doc = JsonDocument.Parse(await response.Content.ReadAsStringAsync(ct));

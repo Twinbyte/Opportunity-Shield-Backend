@@ -13,12 +13,14 @@ public class AnalysisProcessingService : BackgroundService
 {
     private readonly IAnalysisQueue _queue;
     private readonly IServiceScopeFactory _scopeFactory;
+    private readonly ILogger<AnalysisProcessingService> _logger;
 
     public AnalysisProcessingService(
-        IAnalysisQueue queue, IServiceScopeFactory scopeFactory)
+        IAnalysisQueue queue, IServiceScopeFactory scopeFactory, ILogger<AnalysisProcessingService> logger)
     {
         _queue = queue;
         _scopeFactory = scopeFactory;
+        _logger = logger;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
