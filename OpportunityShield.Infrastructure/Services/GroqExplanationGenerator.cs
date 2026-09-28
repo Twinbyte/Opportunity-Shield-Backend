@@ -32,9 +32,15 @@ public class GroqExplanationGenerator : IExplanationGenerator
     public async Task<(string Summary, string Recommendation)> GenerateAsync(
         string opportunityName, string organization, RiskAssessmentResult result, CancellationToken ct = default)
     {
-        var signalLines = result.ResolvedSignals
-            .Select(s => $"- {s.Id} = {s.Value} (source quality: {s.SourceQuality}){(s.Detail is null ? "" : $": {s.Detail}")}");
-
+        var signalLines = result.ResolvedSignals.Select(s =>
+        {
+            var def = SignalCatalog.Definitions[s.Id];
+            var tone = s.Value == SignalValue.Positive ? "good sign"
+                : def.PositiveOnly ? "neutral"
+                : "red flag";
+            var detail = string.IsNullOrWhiteSpace(s.Detail) ? "" : $" — {s.Detail}";
+            return $"- [{tone}] {SignalPresentation.LabelFor(s)}{detail}";
+        });
         var prompt = $$"""
             Opportunity: {{opportunityName}}
             Organization: {{organization}}

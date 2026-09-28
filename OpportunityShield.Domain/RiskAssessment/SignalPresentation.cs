@@ -5,23 +5,26 @@ namespace Oppurtunityshield.Domain.RiskAssessment;
 
 public static class SignalPresentation
 {
-    private static readonly Dictionary<SignalId, string> Labels = new()
+    private static readonly Dictionary<SignalId, (string Good, string Bad)> Labels = new()
     {
-        [SignalId.DomainAge] = "Domain registration age",
-        [SignalId.DomainMatchesOrgName] = "Domain matches organization name",
-        [SignalId.DomainReachable] = "Submitted link is reachable",
-        [SignalId.SslValid] = "Secure connection (HTTPS)",
-        [SignalId.ApplicationDomainMatchesOfficial] = "Hosted on the organization's official domain",
-        [SignalId.OrganizationIdentified] = "Organization could be identified",
-        [SignalId.OfficialWebsiteFound] = "Independent official website found",
-        [SignalId.IndependentSourceCorroboration] = "Corroborated by independent sources",
-        [SignalId.ContactEmailDomainMatch] = "Contact email matches organization domain",
-        [SignalId.ConflictingInformation] = "Conflicts with official information",
-        [SignalId.PaymentRequestPresent] = "Requests payment before starting",
-        [SignalId.SensitiveInfoRequest] = "Requests unnecessary sensitive information",
-        [SignalId.UrgencyPressureLanguage] = "Uses urgency/pressure tactics",
-        [SignalId.UnrealisticOffer] = "Offer seems implausible for the role"
+        [SignalId.DomainAge] = ("Domain has been registered for over a year", "Domain was registered very recently"),
+        [SignalId.DomainMatchesOrgName] = ("Domain matches organization name", "Domain does not match organization name"),
+        [SignalId.DomainReachable] = ("Submitted link is reachable", "Submitted link could not be reached"),
+        [SignalId.SslValid] = ("Secure connection (HTTPS)", "Link does not use a secure connection (HTTPS)"),
+        [SignalId.ApplicationDomainMatchesOfficial] = ("Hosted on the organization's official domain", "Not hosted on the organization's official domain"),
+        [SignalId.OrganizationIdentified] = ("Organization could be identified", "Organization could not be identified"),
+        [SignalId.OfficialWebsiteFound] = ("Independent official website found", "No independent official website found"),
+        [SignalId.IndependentSourceCorroboration] = ("Corroborated by independent sources", "Not corroborated by independent sources"),
+        [SignalId.ContactEmailDomainMatch] = ("Contact email matches organization domain", "Contact email does not match organization domain"),
+        [SignalId.ConflictingInformation] = ("No conflict with official information", "Conflicts with official information"),
+        [SignalId.PaymentRequestPresent] = ("No payment requested", "Requests payment before starting"),
+        [SignalId.SensitiveInfoRequest] = ("No sensitive information requested", "Requests unnecessary sensitive information"),
+        [SignalId.UrgencyPressureLanguage] = ("No urgency or pressure tactics", "Uses urgency/pressure tactics"),
+        [SignalId.UnrealisticOffer] = ("Offer seems realistic for the role", "Offer seems implausible for the role")
     };
+
+    public static string LabelFor(EvidenceSignal s) =>
+        s.Value == SignalValue.Positive ? Labels[s.Id].Good : Labels[s.Id].Bad;
 
     public static List<Signal> ToSignalEntities(IReadOnlyList<EvidenceSignal> resolved)
     {
@@ -42,7 +45,7 @@ public static class SignalPresentation
             result.Add(new Signal
             {
                 Type = s.Value == SignalValue.Positive ? SignalType.Positive : SignalType.Warning,
-                Description = s.Detail is { Length: > 0 } ? $"{Labels[s.Id]}: {s.Detail}" : Labels[s.Id],
+                Description = s.Detail is { Length: > 0 } ? $"{LabelFor(s)}: {s.Detail}" : LabelFor(s),
                 SortOrder = order++
             });
         }
@@ -68,7 +71,7 @@ public static class SignalPresentation
             return new Evidence
             {
                 EvidenceType = s.Id.ToString(),
-                Detail = s.Detail ?? Labels[s.Id],
+                Detail = s.Detail ?? LabelFor(s),
                 Impact = impact,
                 SortOrder = order++
             };
