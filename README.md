@@ -4,8 +4,8 @@ Paste an internship, scholarship, or job posting — get a structured trust asse
 
 Opportunity Shield is a scam-detection API for students. It investigates a submitted URL or text, gathers evidence from web research and content analysis, and returns a risk level, a confidence level, and the evidence behind them — not just a single AI opinion.
 
-**Live API:** `<add deployed URL>`
-**Frontend:** `<add repo link>`
+**Live API:** `https://opportunity-shield-frontend.vercel.app`
+**Frontend:** `https://github.com/Twinbyte/Opportunity-Shield-Frontend.git`
 
 ## Features
 
